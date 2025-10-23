@@ -1,19 +1,31 @@
-## main description
+## Trade Market Web Application
+**Project Goal**
 
-Supermarkets sell goods of various categories. The customers can shop anonymously or by logging in. When buying, a receipt is created with a list of goods purchased in a particular market.
+The Trade Market is a web application built using ASP.NET, designed to manage an online store with a focus on products, customers, receipts, and statistical insights. The application follows a three-layer architecture to ensure modularity, maintainability, and scalability. Additionally, a separate testing project is implemented to validate the functionality of each layer using NUnit.
+Architecture
 
+The project is structured into three distinct layers, each with specific responsibilities:
+1.	**Data Access Layer (DAL)**
+   
+Handles data operations, including database context and entity definitions.<br/>
+Implements repositories to manage data retrieval and storage.<br/>
+Technologies: Entity Framework Core for ORM, SQL Server for data storage.
 
-## Task
+2.	**Business Logic Layer (BLL)**
 
-Make a Web Application for the electronic system **"Trade Market"** with a Three-Layer Architecture as an asp.net application named WebAPI with functionality according route list bellow. 
+Contains interfaces, models, and services that encapsulate the core business logic of the store.<br/>
+Manages operations such as product filtering, customer management, and receipt processing.<br/>
+Ensures separation of concerns by mediating between the DAL and the presentation layer.
 
-The structure of the project in the final form:
+4.	**Web Service Layer (Presentation Layer)**
+   
+Provides a RESTful API for client interaction, handling HTTP requests and responses.<br/>
+Includes data validation and filtering to ensure secure and accurate communication with users.<br/>
+Note: The visual interface is not included; this layer focuses solely on REST API endpoints.<br/>
+Uses Swagger for API documentation and testing.
 
-- The folder **Controllers** contains Web API classes of controllers. 
-- Use **Swagger** to self-document the Web Api.
-
-
-Route List:
+## API Routes
+The application exposes a RESTful API with the following endpoints:
 ```
 GET/api/products – all products
 GET/api/products/{id} – a selected products
@@ -49,6 +61,25 @@ GET/api/statistic/popularProducts?productCount=2 - Gets most popular products
 GET/api/statisic/customer/{id}/{productCount} - Gets the concrete number of most favourite products of customer
 GET/api/statistic/activity/{customerCount}?startDate= 2020-7-21&endDate= 2020-7-22 – Gets the most active customers in a period of time, for example, from 2020-7-21 to 2020-7-22
 GET/api/statistic/income/{categoryId}?startDate= 2020-7-21&endDate= 2020-7-22 – Gets the income of category in a period of time, for example, from 2020-7-21 to 2020-7-22
-
 ```
-This project was a part of Epam training course.
+
+## Testing
+
+A dedicated testing project ensures the reliability of each layer:<br/>
+•	Unit Tests: Validate individual components (e.g., repository methods, service logic) using NUnit.<br/>
+•	Integration Tests: Verify interactions between layers, such as API endpoints and database operations.<br/>
+•	Tests are organized by layer (Data, Business, Web Service) to ensure comprehensive coverage.<br/>
+
+Technologies Used<br/>
+•	ASP.NET Core: Web framework for building the REST API.<br/>
+•	Entity Framework Core: ORM for database interactions.<br/>
+•	Swagger/OpenAPI: API documentation and testing.<br/>
+•	NUnit: Unit and integration testing framework.<br/>
+•	SQL Server: Database for storing products, customers, receipts, and categories.
+
+## Future Improvements<br/>
+•	Implement authentication and authorization for secure API access.<br/>
+•	Add caching mechanisms to improve performance for frequently accessed endpoints.<br/>
+•	Enhance filtering capabilities with additional parameters (e.g., product name, customer demographics).<br/>
+•	Integrate a front-end interface to interact with the API.
+
