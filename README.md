@@ -1,85 +1,169 @@
-## Trade Market Web Application
-**Project Goal**
+# Trade Market API
 
-The Trade Market is a web application built using ASP.NET, designed to manage an online store with a focus on products, customers, receipts, and statistical insights. The application follows a three-layer architecture to ensure modularity, maintainability, and scalability. Additionally, a separate testing project is implemented to validate the functionality of each layer using NUnit.
-Architecture
+Trade Market API is a layered ASP.NET Core Web API for managing an online store domain. It provides endpoints for products, categories, customers, receipts, and sales statistics, with a structure designed to keep data access, business logic, and HTTP delivery clearly separated.
 
-The project is structured into three distinct layers, each with specific responsibilities:
-1.	**Data Access Layer (DAL)**
-   
-Handles data operations, including database context and entity definitions.<br/>
-Implements repositories to manage data retrieval and storage.<br/>
-Technologies: Entity Framework Core for ORM, SQL Server for data storage.
+## Project Highlights
 
-2.	**Business Logic Layer (BLL)**
+- Built with `.NET 6` and `ASP.NET Core Web API`
+- Uses `Entity Framework Core` with `SQL Server`
+- Follows a layered architecture: `Data`, `Business`, `WebApi`
+- Includes automated tests with `NUnit`, `Moq`, and `FluentAssertions`
+- Exposes Swagger documentation in the Development environment
 
-Contains interfaces, models, and services that encapsulate the core business logic of the store.<br/>
-Manages operations such as product filtering, customer management, and receipt processing.<br/>
-Ensures separation of concerns by mediating between the DAL and the presentation layer.
+## Solution Structure
 
-4.	**Web Service Layer (Presentation Layer)**
-   
-Provides a RESTful API for client interaction, handling HTTP requests and responses.<br/>
-Includes data validation and filtering to ensure secure and accurate communication with users.<br/>
-Note: The visual interface is not included; this layer focuses solely on REST API endpoints.<br/>
-Uses Swagger for API documentation and testing.
-
-## API Routes
-The application exposes a RESTful API with the following endpoints:
-```
-GET/api/products – all products
-GET/api/products/{id} – a selected products
-GET/api/products?categoryId=1&minPrice=20&maxPrice=50 – search for products by filter, ffor example, goods of category with Id = 1 and price less then maxPrice=50 and more then minPrice = 20
-POST/api/products – add a product
-PUT/api/products/{id} – change a product
-DELETE/api/products/{id} – delete a product
-GET/api/products/categories - get all categories
-POST/api/products/categories - add a category 
-PUT/api/products/categories{id} - update a category
-DELETE/api/products/categories/{id} - delete a category
-
-GET/api/customers – all customers
-GET/api/customers/products/{id} - all customers who bought specified product
-GET/api/customers/{id} – a selected customer
-POST/api/customers – add a customer
-PUT/api/customers/{id} – change a customer
-DELETE/api/customers/{id} – delete a customer
-
-GET/api/receipts – all receipts
-GET/api/receipts/{id} – a selected receipt
-GET/api/receipts/{id}/details - all details 
-GET/api/receipts/{id}/sum – a selected receipt sum
-GET/api/receipts/period?startDate=2021-12-1&endDate=2020-12-31 – all receipts by period, for example, from 2021-12-1 to 2020-12-31
-POST/api/receipts – add a receipt
-PUT/api/receipts/{id} – change a receipt
-PUT/api/receipts/{id}/products/add/{productId}/{quantity} – add a product to a receipt
-PUT/api/receipts/{id}/products/remove/{productId}/{quantity} – remove a product from a receipt
-PUT/api/receipts/{id}/checkout – change a receipt check out value to true
-DELETE/api/receipts/{id} – delete a receipt
-
-GET/api/statistic/popularProducts?productCount=2 - Gets most popular products
-GET/api/statisic/customer/{id}/{productCount} - Gets the concrete number of most favourite products of customer
-GET/api/statistic/activity/{customerCount}?startDate= 2020-7-21&endDate= 2020-7-22 – Gets the most active customers in a period of time, for example, from 2020-7-21 to 2020-7-22
-GET/api/statistic/income/{categoryId}?startDate= 2020-7-21&endDate= 2020-7-22 – Gets the income of category in a period of time, for example, from 2020-7-21 to 2020-7-22
+```text
+TradeMarketPL-net6.sln
+|-- Data
+|   |-- Entities
+|   |-- Interfaces
+|   |-- Repositories
+|   `-- Migrations
+|-- Business
+|   |-- Models
+|   |-- Services
+|   `-- Interfaces
+|-- WebApi
+|   |-- Controllers
+|   |-- Properties
+|   `-- Startup configuration
+`-- TradeMarket.Tests
 ```
 
-## Testing
+## Architecture
 
-A dedicated testing project ensures the reliability of each layer:<br/>
-•	Unit Tests: Validate individual components (e.g., repository methods, service logic) using NUnit.<br/>
-•	Integration Tests: Verify interactions between layers, such as API endpoints and database operations.<br/>
-•	Tests are organized by layer (Data, Business, Web Service) to ensure comprehensive coverage.<br/>
+### Data Layer
 
-Technologies Used<br/>
-•	ASP.NET Core: Web framework for building the REST API.<br/>
-•	Entity Framework Core: ORM for database interactions.<br/>
-•	Swagger/OpenAPI: API documentation and testing.<br/>
-•	NUnit: Unit and integration testing framework.<br/>
-•	SQL Server: Database for storing products, customers, receipts, and categories.
+The `Data` project is responsible for persistence and database interaction. It contains the EF Core `DbContext`, entity classes, repository implementations, and migrations.
 
-## Future Improvements<br/>
-•	Implement authentication and authorization for secure API access.<br/>
-•	Add caching mechanisms to improve performance for frequently accessed endpoints.<br/>
-•	Enhance filtering capabilities with additional parameters (e.g., product name, customer demographics).<br/>
-•	Integrate a front-end interface to interact with the API.
+### Business Layer
 
+The `Business` project contains service interfaces, domain models, and application logic. It acts as the boundary between persistence and the API layer.
+
+### API Layer
+
+The `WebApi` project exposes REST endpoints, configures dependency injection, wires up Swagger, and hosts the application runtime.
+
+### Test Layer
+
+The `TradeMarket.Tests` project contains automated tests for application behavior and supports validation of the service and API layers.
+
+## Technology Stack
+
+- `.NET 6`
+- `ASP.NET Core`
+- `Entity Framework Core 6`
+- `SQL Server / LocalDB`
+- `Swagger / OpenAPI`
+- `NUnit`
+- `Moq`
+- `FluentAssertions`
+- `AutoMapper`
+
+## Getting Started
+
+### Prerequisites
+
+- `.NET 6 SDK`
+- `SQL Server LocalDB` or another accessible SQL Server instance
+- `Visual Studio 2022` or the `dotnet` CLI
+
+### Configuration
+
+The default development connection string is defined in `WebApi/appsettings.Development.json`:
+
+```json
+"ConnectionStrings": {
+  "Market": "Server=(localdb)\\mssqllocaldb;Database=MarketDB;Trusted_Connection=True;MultipleActiveResultSets=true"
+}
+```
+
+If needed, replace it with a connection string for your local SQL Server instance.
+
+### Restore Packages
+
+```powershell
+dotnet restore
+```
+
+### Apply Database Migrations
+
+```powershell
+dotnet ef database update --project Data --startup-project WebApi
+```
+
+### Run the Application
+
+```powershell
+dotnet run --project WebApi
+```
+
+The default launch profile exposes the API at:
+
+- `http://localhost:5000`
+- `https://localhost:5001`
+
+Swagger UI is available in Development at:
+
+- `http://localhost:5000/swagger`
+- `https://localhost:5001/swagger`
+
+## Running Tests
+
+```powershell
+dotnet test
+```
+
+## API Surface
+
+### Products
+
+- `GET /api/products`
+- `GET /api/products/{id}`
+- `GET /api/products?categoryId=1&minPrice=20&maxPrice=50`
+- `POST /api/products`
+- `PUT /api/products/{id}`
+- `DELETE /api/products/{id}`
+
+### Product Categories
+
+- `GET /api/products/categories`
+- `POST /api/products/categories`
+- `PUT /api/products/categories/{id}`
+- `DELETE /api/products/categories/{id}`
+
+### Customers
+
+- `GET /api/customers`
+- `GET /api/customers/{id}`
+- `GET /api/customers/products/{id}`
+- `POST /api/customers`
+- `PUT /api/customers/{id}`
+- `DELETE /api/customers/{id}`
+
+### Receipts
+
+- `GET /api/receipts`
+- `GET /api/receipts/{id}`
+- `GET /api/receipts/{id}/details`
+- `GET /api/receipts/{id}/sum`
+- `GET /api/receipts/period?startDate=2021-12-01&endDate=2021-12-31`
+- `POST /api/receipts`
+- `PUT /api/receipts/{id}`
+- `PUT /api/receipts/{id}/products/add/{productId}/{quantity}`
+- `PUT /api/receipts/{id}/products/remove/{productId}/{quantity}`
+- `PUT /api/receipts/{id}/checkout`
+- `DELETE /api/receipts/{id}`
+
+### Statistics
+
+- `GET /api/statistics/popularProducts?productCount=2`
+- `GET /api/statistics/customer/{id}/{productCount}`
+- `GET /api/statistics/activity/{customerCount}?startDate=2020-07-21&endDate=2020-07-22`
+- `GET /api/statistics/income/{categoryId}?startDate=2020-07-21&endDate=2020-07-22`
+
+## Development Notes
+
+- Swagger is enabled only for the Development environment.
+- The solution uses shared analyzer configuration through `code-analysis.ruleset`.
+- Style rules are configured in `stylecop.json`.
